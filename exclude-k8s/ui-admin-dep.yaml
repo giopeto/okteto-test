@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ui-admin-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ui-admin
+  template:
+    metadata:
+      labels:
+        app: ui-admin
+    spec:
+      containers:
+        - name: ui-admin
+          image: giopeto/e-shop-ui-admin:dev-1
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ui-admin-svc
+spec:
+  selector:
+    app: ui-admin
+  ports:
+    - protocol: "TCP"
+      # Port accessible inside cluster
+      port: 80
+      # Port to forward to inside the pod
+      targetPort: 80
+      # Port accessible outside cluster
+      nodePort: 30100
+  type: LoadBalancer
